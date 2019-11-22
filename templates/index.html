@@ -1,0 +1,181 @@
+<!-- @model Coordinates
+@using Docusign.Models; -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Droppable - Default functionality</title>
+    <style>
+        #draggable {
+            float:left;
+            width: 200px;
+            height: 200px;            
+            border: 1px solid red;
+        }
+
+        #droppable {
+            float: left;
+            margin-top: 100px;
+            border: 1px solid yellow;
+        }
+    </style>
+    
+</head>
+<body>
+    {% block content %}
+
+
+
+    <div id="droppable" class="ui-widget-header" style="position:relative;">
+        <img id="draggable" class="ui-widget-content" src="{{ base64}} " style="position:absolute;" />
+        <canvas id="the-canvas"></canvas>
+    </div>
+
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+    <form method="POST" action="savefile" enctype = "multipart/form-data" role="form">
+        <input type="hidden" id="hd_topValue" name="hd_topValue" value="0"/>
+        <input type="hidden" id="hd_leftValue" name="hd_leftValue" value="0" />
+        <input type="hidden" id="hd_pageNumber" name="hd_pageNumber" value="1"/>        
+        <input type = "submit" value = "save" />
+    </form>
+    &nbsp; &nbsp;
+    <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script>
+
+
+        $(function () {
+            $("#draggable").draggable({ containment: "parent" });
+            $("#droppable").droppable({
+                drop: function (event, ui) {
+                    //var position='Top: '+ui.position.top + ',Left: '+ ui.position.left;
+                    GetCoordinates();
+                }
+            });
+        }
+
+        );
+
+        function GetCoordinates() {
+            //var position2 = $('#droppable').position();
+            var position1 = $('#draggable').position();
+            var topvalue = parseInt($("#droppable").css("margin-top"));
+            var top = position1.top/2;
+            //var top = position1.top - topvalue - 10;
+            var left = position1.left/2;
+            //var left = position1.left - position2.left;
+            $('#hd_topValue').val(top);
+            $('#hd_leftValue').val(left);
+            $('#hd_pageNumber').val(pageNum);
+            //return 'Top: '+top + ',Left: '+ left;
+            //alert(position);
+        }
+    </script>
+    <script>
+        // If absolute URL from the remote server is provided, configure the CORS
+        // header on that server.
+        var url = "{{ file_path }}";
+
+        // Loaded via <script> tag, create shortcut to access PDF.js exports.
+        var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+        // The workerSrc property shall be specified.
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+        var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 2.0,
+            canvas = document.getElementById('the-canvas'),
+            ctx = canvas.getContext('2d');
+
+        /**
+         * Get page info from document, resize canvas accordingly, and render page.
+         * param num Page number.
+         */
+        function renderPage(num) {
+            pageRendering = true;
+            // Using promise to fetch the page
+            pdfDoc.getPage(num).then(function (page) {
+                var viewport = page.getViewport({ scale: scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+
+                // Wait for rendering to finish
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        // New page rendering is pending
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            // Update page counters
+            document.getElementById('page_num').textContent = num;
+        }
+
+        /**
+         * If another page rendering in progress, waits until the rendering is
+         * finised. Otherwise, executes rendering immediately.
+         */
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        /**
+         * Displays previous page.
+         */
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+
+        /**
+         * Displays next page.
+         */
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('next').addEventListener('click', onNextPage);
+
+        /**
+         * Asynchronously downloads PDF.
+         */
+        pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+            // Initial/first page rendering
+            renderPage(pageNum);
+        });
+    </script>
+
+{% endblock %}
+</body>
+</html>
