@@ -118,6 +118,7 @@ def upload_file1():
         #print(filename.)
         url1 = pdf.url(filename)
         base64 = generateqr()
+        session['base64'] = base64
         session['pdfurl']=url1
         print(APP_ROOT)
         #filename2 = photos.save(request.files['image'])
@@ -132,7 +133,7 @@ def savefile():
         hd_topValue = request.form.get('hd_topValue')
         hd_leftValue =request.form.get('hd_leftValue')
         hd_pageNumber =request.form.get('hd_pageNumber')
-        b=session.get('base64str')
+        b=session.get('base64')
         arr = []
         arr = b.split(',')
         b1 = arr[1]
