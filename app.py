@@ -6,7 +6,7 @@ import os
 from flask import send_file, send_from_directory, safe_join, abort
 import hashlib
 import base64
-#from PIL import Image
+from PIL import Image
 import io
 from werkzeug.utils import secure_filename
 import requests 
@@ -16,11 +16,11 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from werkzeug.datastructures import FileStorage
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-import cv2
-import numpy as np
+#import cv2
+#import numpy as np
 from flask import Flask, session
 from reportlab.pdfgen import canvas
-from PyPDF2 import PdfFileWriter, PdfFileReader
+#from PyPDF2 import PdfFileWriter, PdfFileReader
 import fitz
 from io import StringIO
 import urllib.request
