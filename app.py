@@ -142,7 +142,7 @@ def savefile():
         image = base64.b64decode(str(b1))
         im = Image.open(io.BytesIO(image))
         src_pdf_filename = session.get('path')#"static/download.pdf"#
-        dst_pdf_filename = 'static/destination.pdf'
+        dst_pdf_filename = 'destination.pdf'
         print("before")
         print(src_pdf_filename)
         print(APP_ROOT)
