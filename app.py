@@ -6,7 +6,7 @@ import os
 from flask import send_file, send_from_directory, safe_join, abort
 import hashlib
 import base64
-from PIL import Image
+#from PIL import Image
 import io
 from werkzeug.utils import secure_filename
 import requests 
