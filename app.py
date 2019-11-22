@@ -133,7 +133,8 @@ def savefile():
         hd_topValue = request.form.get('hd_topValue')
         hd_leftValue =request.form.get('hd_leftValue')
         hd_pageNumber =request.form.get('hd_pageNumber')
-        b=session.get('base64')
+        hd_baseval = request.form.get('hd_baseval')
+        b=hd_baseval
         arr = []
         arr = b.split(',')
         b1 = arr[1]
@@ -153,14 +154,6 @@ def savefile():
         remoteFile = urllib.request.urlopen(session.get('pdfurl')).read()
         
         document = fitz.open(stream=remoteFile,filetype='pdf')
-        # input1 = PdfFileReader(open(src_pdf_filename, 'rb'))
-        # print(input1.getPage(1).mediaBox)
-        # page1=input1.getPage(1)
-        # pagelenght=page1.__len__()
-        # print("page length")
-        # print(pagelenght)
-        # #len1 = pagelenght-hd_topValue-200
-        #print(len1)
         hd_pageNumber = int(hd_pageNumber)
         hd_pageNumber-= 1
         page = document[hd_pageNumber]

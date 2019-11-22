@@ -37,7 +37,9 @@
     <form method="POST" action="savefile" enctype = "multipart/form-data" role="form">
         <input type="hidden" id="hd_topValue" name="hd_topValue" value="0"/>
         <input type="hidden" id="hd_leftValue" name="hd_leftValue" value="0" />
-        <input type="hidden" id="hd_pageNumber" name="hd_pageNumber" value="1"/>        
+        <input type="hidden" id="hd_pageNumber" name="hd_pageNumber" value="1"/>
+        <input type="hidden" id="hd_baseval" name="hd_baseval" value="{{ base64 }}"/>
+                
         <input type = "submit" value = "save" />
     </form>
     &nbsp; &nbsp;
