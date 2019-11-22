@@ -1,0 +1,4 @@
+:repo:deb http://archive.ubuntu.com/ubuntu artful main universe
+imagemagick
+ffmpeg
+mupdf-tools
