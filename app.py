@@ -144,13 +144,9 @@ def savefile():
         im = Image.open(io.BytesIO(image))
         src_pdf_filename = session.get('path')#"static/download.pdf"#
         dst_pdf_filename = 'destination.pdf'
-        print("before")
-        print(src_pdf_filename)
-        print(APP_ROOT)
-        src_pdf_filename=src_pdf_filename.replace(APP_ROOT,'')
-        print("After")
-        print(src_pdf_filename)
-
+        
+        #src_pdf_filename=src_pdf_filename.replace(APP_ROOT,'')
+        
         remoteFile = urllib.request.urlopen(session.get('pdfurl')).read()
         
         document = fitz.open(stream=remoteFile,filetype='pdf')
