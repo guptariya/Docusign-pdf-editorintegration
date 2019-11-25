@@ -16,24 +16,12 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from werkzeug.datastructures import FileStorage
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-#import cv2
-#import numpy as np
 from flask import Flask, session
 from reportlab.pdfgen import canvas
-#from PyPDF2 import PdfFileWriter, PdfFileReader
 import fitz
 from io import StringIO
 import urllib.request
 from flask_session.__init__ import Session
-
-#app = Flask(__name__)
-
-# Uploads
-# UPLOADS_DEFAULT_DEST = '/project/static/pdf/'
-# UPLOADS_DEFAULT_URL = 'http://localhost:5000/static/pdf/'
- 
-# UPLOADED_IMAGES_DEST = 'static/img/'
-# UPLOADED_IMAGES_URL = 'http://localhost:5000/static/img/'
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -69,62 +57,27 @@ def generateqr():
     a=json.dumps(data['uniqueId']).strip('"')
     qrlink = json.dumps(data['QR']).strip('"')
     session['link'] = qrlink
-    #print(qrlink)
     b=json.dumps(data['qrImage'])
     base64src1=json.dumps(data['qrImage'])
-    #print(b)
     arr = []
     arr = b.split(',')
     b1 = arr[1]
     base64src1= base64src1.replace(".png","png")
     base64src1=base64src1.strip('"')
-    #print(base64src1)
     session['base64str'] = base64src1
-    #d1 = session.get('base64str')
-    #print(d1)
     image = base64.b64decode(str(b1))
-
-    # target = os.path.join(APP_ROOT, '/images')
-    # file_name = uuid.uuid4().hex[:50].upper()
-    # fileExtension = '.png'
-    # file_name += fileExtension
-    # image_path = file_name
-    # im = Image.open(io.BytesIO(image))
-    # newsize = (100, 100) 
-    # im1 = im.resize(newsize)
-    #     #im1.save('/tmp/'+image_path)
-    # destination = "/".join([target, file_name])
-    
-    # im1.save(destination)
-    # #upload.save()  
     return base64src1
 
-    
-    # nparr = np.fromstring(image.decode('base64'), np.uint8)
-    # imggg = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
-    # cv2.imwrite(file_name, imggg)
-    # #im1.save('/tmp/'+image_path)
-    #im1.save(image_path)
-    #print(file_name)
-
-    #images.save(im1)
-    #return send_file(file_name, mimetype='image/png')
 
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file1():
     if request.method == 'POST':
         filename = pdf.save(request.files['file'])
         session['path'] = pdf.path(filename)
-        #print(filename.)
         url1 = pdf.url(filename)
         base64 = generateqr()
         session['base64'] = base64
         session['pdfurl']=url1
-        print(APP_ROOT)
-        #filename2 = photos.save(request.files['image'])
-        #url2 = photos.url(filename2)
-        #qr = generateqr()
-        #print(qr)
         return render_template("index.html",file_path=url1,base64 = base64)
 
 @app.route('/savefile', methods = ['GET', 'POST'])
@@ -144,9 +97,6 @@ def savefile():
         im = Image.open(io.BytesIO(image))
         src_pdf_filename = session.get('path')#"static/download.pdf"#
         dst_pdf_filename = 'destination.pdf'
-        
-        #src_pdf_filename=src_pdf_filename.replace(APP_ROOT,'')
-        
         remoteFile = urllib.request.urlopen(session.get('pdfurl')).read()
         
         document = fitz.open(stream=remoteFile,filetype='pdf')
