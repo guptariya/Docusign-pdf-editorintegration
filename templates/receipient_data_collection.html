@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<body>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% block content %}
+<form class="form-horizontal" action='' method="post" enctype = "multipart/form-data" role="form">
+{% csrf_token %}  
+
+  <fieldset>
+    <div id="legend">
+      <legend class="">Please Enter Signer details</legend>
+    </div>
+    <div class="control-group">
+      <!-- Username -->
+      <label class="control-label"  for="name">Name</label>
+      <div class="controls">
+        <input type="text" id="name" name="name" placeholder="" class="input-xlarge">
+        <p class="help-block">Name of the reciepient to send the document</p>
+      </div>
+    </div>
+ 
+    <div class="control-group">
+      <!-- E-mail -->
+      <label class="control-label" for="email">E-mail</label>
+      <div class="controls">
+        <input type="email" id="email" name="email" placeholder="" class="input-xlarge">
+        <p class="help-block">Email-Address of the receipient to send document</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <!-- E-mail -->
+      <label class="control-label" for="subject">E-mail Subject</label>
+      <div class="controls">
+        <input type="text" id="subject" name="subject" placeholder="" class="input-xlarge">
+        <p class="help-block">Email-Subject for the receipient to send document</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <!-- E-mail -->
+      <label class="control-label" for="body">E-mail body</label>
+      <div class="controls">
+        <input type="text" id="body" name="body" placeholder="" class="input-xlarge">
+        <p class="help-block">Email-body for the receipient to send document</p>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <!-- E-mail -->
+      <label class="control-label" for="file">File</label>
+      <div class="controls">
+        <input type="file" id="file" name="file" placeholder="" class="input-xlarge">
+        <p class="help-block">Upload File for signing </p>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <!-- Button -->
+      <div class="controls">
+        <button class="btn btn-success" type="submit">Register</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+{% endblock %}
+</body>
+</html>

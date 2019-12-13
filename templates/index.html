@@ -39,9 +39,10 @@
         <input type="hidden" id="hd_leftValue" name="hd_leftValue" value="0" />
         <input type="hidden" id="hd_pageNumber" name="hd_pageNumber" value="1"/>
         <input type="hidden" id="hd_baseval" name="hd_baseval" value="{{ base64 }}"/>
-                
-        <input type = "submit" value = "save" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>        
+        <input type = "submit"  value = "save" />
     </form>
+    <a href="eg011">Submit</a>
     &nbsp; &nbsp;
     <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -176,6 +177,7 @@
             // Initial/first page rendering
             renderPage(pageNum);
         });
+        
     </script>
 
 {% endblock %}
